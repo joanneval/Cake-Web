@@ -315,11 +315,19 @@ tr:hover{
                             <td><span class="status-badge ${statusClass}">${order.status}</span></td>
                            <td>
                                ${user.role === "admin" ? `
-                               <button class="btn btn-status" onclick="updateStatus('${order._id}', 'Pending')">P</button>
-                               <button class="btn btn-delivered" onclick="updateStatus('${order._id}', 'Delivered')">D</button>
-                               <button class="btn btn-cancel" onclick="updateStatus('${order._id}', 'Cancelled')">C</button>
-                                ` : ''}
-                               <button class="delete-btn" onclick="deleteOrder('${order._id}')">Delete</button>
+                               <div class="actions">
+                                <ul>
+                               <li><button class="btn btn-purple" onclick="updateStatus('${order._id}', 'Pending')">Pending</button></li>
+                                <li><button class="btn btn-green" onclick="updateStatus('${order._id}', 'Delivered')">Delivered</button></li>
+                                <li><button class="btn btn-red" onclick="updateStatus('${order._id}', 'Cancelled')">Cancel</button></li>
+                                <li><button class="btn btn-gray" onclick="deleteOrder('${order._id}')">Delete</button></li>
+                                </ul>
+                            </div>
+                            ` : `
+                                <div class="actions">
+                                    <button class="btn btn-gray" onclick="deleteOrder('${order._id}')">Delete</button>
+                                </div>
+                                `}
                                </td>
                         `;
                         table.appendChild(row);
