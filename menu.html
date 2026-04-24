@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asuncion's Purple Hub | Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Navbar - Consistent with homepage */
+        .navbar {
+            background: rgba(155, 77, 202, 0.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 8px 32px rgba(155, 77, 202, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .logo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #fff, #e1bee7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a{
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.5rem;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Dancing Script', 'Brush Script MT';
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(155, 77, 202, 0.4);
+        }
+
+        /* Menu Container */
+        .menu-container {
+            padding: 140px 5% 80px;
+            background: linear-gradient(135deg, #f9f0ff 0%, #e1bee7 100%);
+            min-height: 100vh;
+        }
+
+        /* Category Title */
+        .category-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            color: #6a1b9a;
+            text-align: center;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .category-title::after {
+            content: '';
+            display: block;
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(45deg, #9b4dca, #6a1b9a);
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        /* Menu Grid */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .menu-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(155, 77, 202, 0.15);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            height: 530px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(155, 77, 202, 0.25);
+        }
+
+        .menu-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            object-position: center;
+            transition: all 0.4s ease;
+        }
+
+        .menu-card:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Card Content */
+        .menu-card-content {
+            padding: 1.5rem;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .menu-card h3 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #6a1b9a;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .menu-card .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 1rem;
+        }
+
+        /* Order Button */
+        .order-btn {
+            background: linear-gradient(45deg, #9b4dca, #6a1b9a);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .order-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(155, 77, 202, 0.4);
+        }
+
+        .order-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Order Modal */
+        #orderForm {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 30px 80px rgba(155, 77, 202, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 2000;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1500;
+        }
+
+        /* Form Styling */
+        #orderForm label {
+            display: block;
+            margin: 1rem 0 0.5rem;
+            font-weight: 600;
+            color: #6a1b9a;
+        }
+
+        #orderForm select,
+        #orderForm input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e1bee7;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        #orderForm select:focus,
+        #orderForm input:focus {
+            outline: none;
+            border-color: #9b4dca;
+            box-shadow: 0 0 0 3px rgba(155, 77, 202, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn-confirm {
+            flex: 1;
+            background: linear-gradient(45deg, #9b4dca, #6a1b9a);
+            color: white;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 2px solid #e9ecef;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1.5rem;
+            }
+
+            .menu-card {
+                height: 380px;
+            }
+
+            .menu-card img {
+                height: 220px;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+
+        body.scrolled .navbar {
+            padding: 0.8rem 5%;
+            background: rgba(155, 77, 202, 0.98);
+        }
+
+        .out-of-stock{
+            opacity: 0.5;
+            position: relative;
+        }
+
+        .out-of-stock::after {
+            content: "OUT OF STOCK";
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(220, 53, 69, 0.9);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .low-stock .price {
+            color: #ffc107 !important;
+        }
+        
+        .stock-status {
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .status-in-stock { background: rgba(40, 167, 69, 0.1); color: #28a745; }
+        .status-low-stock { background: rgba(255, 193, 7, 0.1); color: #856404; }
+        .status-out-stock { background: rgba(220, 53, 69, 0.1); color: #dc3545; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo"><strong>Asuncion's Purple Hub</strong></div> 
+            <ul class="nav-links">
+                <li><a href="homepage.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="about.html">About us</a></li>
+                <li id="ordersLink"><a href="orders.html">Orders</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="menu-container">
+        <section class="menu-section">
+            <h2 class="category-title">Our Menu</h2>
+            <div class="menu-grid" id="menuGrid">
+                <div class="menu-card"><img src="image/cake.jpg" alt="mango cake"><p><strong>₱ 990.00</strong><br>Mango Cake</p>
+                <button onclick="orderCake('Mango Cake', 990)">Order Now</button></div>
+                <div class="menu-card"><img src="image/cake2.jpg" alt="cupcake"><p><strong>₱ 150.00</strong><br>Ube messy cup</p>
+                <button onclick="orderCake('Ube messy cup', 150)">Order Now</button></div>
+                <div class="menu-card"><img src="image/ubecake.jpg" alt="delicious"><p><strong>₱ 950.00</strong><br>Ube Cake</p>
+                <button onclick="orderCake('Ube Cake', 950)">Order Now</button></div>
+                <div class="menu-card"><img src="image/chocolate cake.jpg" alt="Chocolate Cake"><p><strong>₱ 1,500.00</strong><br>Chocolate Cake</p>
+                <button onclick="orderCake('Chocolate Cake', 1500)">Order Now</button></div>
+                <div class="menu-card"><img src="image/heart ube cake.jpg" alt="heart cake"><p><strong>₱ 500.00</strong><br>Heart ube Cake</p>
+                <button onclick="orderCake('Heart ube Cake', 500)">Order Now</button></div>
+                <div class="menu-card"><img src="image/vanilla cake.jpg" alt="heart cake"><p><strong>₱ 600.00</strong><br>Vanilla Cake</p>
+                <button onclick="orderCake('Vanilla Cake', 600)">Order Now</button></div>
+                <div class="loading">Loading menu from inventory...</div>
+            </div>
+        </section>
+    </main>
+   
+    <div id="orderForm" style="display: none; border: 1px solid #ccc; padding:20px; width: 350px; background: white; position: fixed; top: 20%; left: 35%; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.3); border-radius: 10px;">
+
+        <h3 style="margin-top: 0; color: #6a1b9a;">Order Cake</h3>
+
+        <p id="cakeName" style="font-weight: bold; color: #4a148c;"></p>
+        <p id="cakePrice" style="font-size: 1.2em; color: #28a745; font-weight: bold;"></p>
+
+        <label>Size *</label>
+        <select id="size" style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            <option value="" disabled selected>Select Size</option>
+            <option value="Small">Small</option>
+            <option value="Medium">Medium</option>
+            <option value="Large">Large</option>
+        </select>
+
+        <label>Flavor *</label>
+        <select id="flavor" style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+            <option value="" disabled selected>Select Flavor</option>
+            <option value="Chocolate">Chocolate</option>
+            <option value="Vanilla">Vanilla</option>
+            <option value="Ube">Ube</option>
+            <option value="Mango">Mango</option>
+        </select>
+
+        <label>Delivery Date *</label>
+        <input type="date" id="date" style="width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px;">
+
+        <label>Payment Method *</label>
+        <select id="payment" style="width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px;">
+            <option value="" disabled selected>Select Payment</option>
+            <option value="COD">COD</option>
+            <option value="GCash">GCash</option>
+        </select>
+
+        <div style="display: flex; gap: 10px;">
+            <button onclick="placeOrder()" style="flex: 1; padding: 12px; background: #6a1b9a; color: white; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Confirm Order</button>
+            <button onclick="closeOrder()" style="flex: 1; padding: 12px; background: #ccc; color: #333; border: none; border-radius: 5px; font-weight: bold; cursor: pointer;">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+let selectedCake = "";
+let selectedPrice = 0;
+let availableVariants = [];
+let currentVariantPrice = 0;  
+
+window.onload = loadMenuFromInventory;
+
+function loadMenuFromInventory() {
+    fetch("inventory.php")
+    .then(res => res.json())
+    .then(data => {
+        displayMenu(data);
+    })
+    .catch(err => {
+        console.error("Menu load error:", err);
+        document.getElementById("menuGrid").innerHTML = 
+            '<div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: #666;">Menu temporarily unavailable. Please try again later.</div>';
+    });
+}
+
+function displayMenu(inventory) {
+    const grid = document.getElementById("menuGrid");
+    
+    const products = {};
+    inventory.forEach(item => {
+        if (!products[item.product_name]) {
+            products[item.product_name] = {
+                name: item.product_name,
+                variants: [],
+                totalStock: 0,
+                image: getImageForCake(item.product_name)
+            };
+        }
+        products[item.product_name].variants.push({
+            size: item.size,
+            flavor: item.flavor,
+            price: parseFloat(item.price),  
+            stock: item.quantity
+        });
+        products[item.product_name].totalStock += item.quantity;
+    });
+
+    let html = '';
+    Object.values(products).forEach(product => {
+        const status = getStockStatus(product.totalStock);
+        const sampleVariant = product.variants[0] || { price: 0 };
+        
+    
+        const prices = product.variants.map(v => v.price);
+        const minPrice = Math.min(...prices);
+        const maxPrice = Math.max(...prices);
+        const priceDisplay = minPrice === maxPrice ? 
+            `₱${minPrice.toLocaleString()}` : 
+            `₱${minPrice.toLocaleString()}-${maxPrice.toLocaleString()}`;
+        
+        html += `
+            <div class="menu-card ${status.className}" data-product="${product.name}">
+                <img src="${product.image}" alt="${product.name}" onerror="this.src='image/cake.jpg'">
+                <div class="menu-card-content">
+                    <h3>${product.name}</h3>
+                    <div class="price">${priceDisplay}</div>
+                    <div class="stock-status ${status.statusClass}">${status.text}</div>
+                    ${product.totalStock > 0 ? 
+                        `<button class="order-btn" onclick="orderCake('${product.name}')">Order Now</button>` : 
+                        `<button class="order-btn" disabled style="opacity: 0.6; cursor: not-allowed;">Sold Out</button>`
+                    }
+                </div>
+            </div>
+        `;
+    });
+
+    grid.innerHTML = html || '<div style="grid-column: 1 / -1; text-align: center; padding: 4rem; color: #666;">No products available</div>';
+}
+
+function getStockStatus(totalStock) {
+    if (totalStock === 0) return { text: 'Out of Stock', statusClass: 'status-out-stock', className: 'out-of-stock' };
+    if (totalStock <= 5) return { text: 'Low Stock', statusClass: 'status-low-stock', className: 'low-stock' };
+    return { text: 'In Stock', statusClass: 'status-in-stock', className: '' };
+}
+
+function getImageForCake(name) {
+    const images = {
+        'Mango Cake': 'image/cake.jpg',
+        'Ube Cake': 'image/ubecake.jpg',
+        'Chocolate Cake': 'image/chocolate cake.jpg',
+        'Ube messy cup': 'image/cake2.jpg',
+        'Heart ube Cake': 'image/heart ube cake.jpg',
+        'Vanilla Cake': 'image/vanilla cake.jpg'
+    };
+    return images[name] || 'image/cake.jpg';
+}
+
+function orderCake(name) {
+    selectedCake = name;
+    
+   
+    fetch(`inventory.php?check=${encodeURIComponent(name)}`)
+    .then(res => res.json())
+    .then(data => {
+        let totalAvailable = 0;
+        availableVariants = [];
+
+        if (Array.isArray(data)) {
+            totalAvailable = data.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
+            availableVariants = data.filter(item => parseInt(item.quantity) > 0);
+        }
+
+        if (totalAvailable <= 0) {
+            alert(`${name} is currently **OUT OF STOCK**! Please check back later.`);
+            return;
+        }
+        if (totalAvailable <= 5) {
+            alert(`**Low Stock Alert**: Only ${totalAvailable} ${name} available! Order quickly!`);
+        }
+        
+        
+        selectedPrice = availableVariants[0]?.price || 0;
+        
+        document.getElementById("cakeName").innerText = `Cake: ${name}`;
+        document.getElementById("cakePrice").innerHTML = `Price: ₱${selectedPrice.toLocaleString()}`;
+        
+        populateFormOptions();
+        document.getElementById("orderForm").style.display = "block";
+        document.body.style.overflow = "hidden";
+    })
+    .catch(err => {
+        console.error("Inventory check failed:", err);
+        alert("Could not load variants. Using default price.");
+        document.getElementById("orderForm").style.display = "block";
+        document.body.style.overflow = "hidden";
+    });
+}
+
+function populateFormOptions() {
+    const sizeSelect = document.getElementById("size");
+    const flavorSelect = document.getElementById("flavor");
+
+    sizeSelect.innerHTML = '<option value="" disabled selected>Select Size</option>';
+    flavorSelect.innerHTML = '<option value="" disabled selected>Select Flavor</option>';
+
+    const availableSizes = [...new Set(availableVariants.map(v => v.size))].sort();
+    const availableFlavors = [...new Set(availableVariants.map(v => v.flavor))].sort();
+
+    availableSizes.forEach(size => {
+        const option = document.createElement('option');
+        option.value = size;
+        option.textContent = `${size}`;
+        sizeSelect.appendChild(option);
+    });
+
+    availableFlavors.forEach(flavor => {
+        const option = document.createElement('option');
+        option.value = flavor;
+        option.textContent = `${flavor}`;
+        flavorSelect.appendChild(option);
+    });
+
+    
+    sizeSelect.onchange = updateStockInfo;
+    flavorSelect.onchange = updateStockInfo;
+}
+
+function updateStockInfo() {  
+    const size = document.getElementById("size").value;
+    const flavor = document.getElementById("flavor").value;
+    const priceElement = document.getElementById("cakePrice");
+
+    if (size && flavor && availableVariants.length > 0) {
+        const variant = availableVariants.find(v => 
+            v.size === size && v.flavor === flavor && parseInt(v.quantity) > 0
+        );
+        
+        if (variant) {
+            
+            selectedPrice = parseFloat(variant.price);
+            priceElement.innerHTML = `
+                Price: ₱<strong>${selectedPrice.toLocaleString()}</strong><br>
+                <small style="color: #666;">Stock: ${variant.quantity} available</small>
+            `;
+            console.log(` ${size} ${flavor}: ₱${selectedPrice} (Stock: ${variant.quantity})`);
+        } else {
+            priceElement.innerHTML = "Price: <span style='color: #dc3545;'>Out of stock</span>";
+            selectedPrice = 0;
+        }
+    } else {
+        
+        priceElement.innerHTML = `Price: ₱${selectedPrice.toLocaleString()}`;
+    }
+}
+
+function closeOrder() {
+    document.getElementById("orderForm").style.display = "none";
+    document.body.style.overflow = "auto";
+    document.getElementById("size").value = "";
+    document.getElementById("flavor").value = "";
+    document.getElementById("date").value = "";
+    document.getElementById("payment").value = "";
+}
+
+function placeOrder() {
+    let size = document.getElementById("size").value;
+    let flavor = document.getElementById("flavor").value;
+    let date = document.getElementById("date").value;
+    let payment = document.getElementById("payment").value;
+
+    if (!size || !flavor || !date || !payment) {
+        alert("Please select all order details.");
+        return;
+    }
+
+    const variant = availableVariants.find(v => 
+        v.size === size && v.flavor === flavor && parseInt(v.quantity) > 0
+    );
+    
+    if (!variant) {
+        alert(`Sorry, ${size} ${flavor} is out of stock!`);
+        return;
+    }
+
+    let today = new Date().toISOString().split('T')[0];
+    if (date < today) {
+        alert("Please select a future date.");
+        return;
+    }
+
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        alert("Please login first!");
+        window.location.href = "signin.html";
+        return;
+    }
+
+    if (!user.name || !user.phone || !user.street || !user.house_number || !user.city) {
+        alert("Please complete your FULL profile!");
+        window.location.href = "profile.html";
+        return;
+    }
+
+  
+    console.log(` Order: ${selectedCake} (${size}, ${flavor}) = ₱${selectedPrice}`);
+
+    let formData = new FormData();
+    formData.append("customer", user.name);
+    formData.append("email", user.email || '');
+    formData.append("phone", user.phone);
+    formData.append("street", user.street);
+    formData.append("house_number", user.house_number);
+    formData.append("city", user.city);
+    formData.append("state_province", user.state_province || '');
+    formData.append("postal_code", user.postal_code || '');
+    formData.append("cake", selectedCake);
+    formData.append("price", selectedPrice);  
+    formData.append("size", size);
+    formData.append("flavor", flavor);
+    formData.append("date", date);
+    formData.append("payment", payment);
+
+    fetch("orders.php", { method: "POST", body: formData })
+    .then(res => res.text())
+    .then(data => {
+        if (data.trim() === "success") {
+            alert(" Order placed successfully!\nCheck Orders page.");
+            closeOrder();
+        } else {
+            alert(" Error: " + data.trim());
+        }
+    })
+    .catch(err => {
+        console.error("Order error:", err);
+        alert("Network error. Try again.");
+    });
+}
+</script>
+</body>
+</html>

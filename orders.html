@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management</title>
+    <link rel="stylesheet" href="sign.css">
+    <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#f7f0ff,#eee7ff);
+    padding:25px;
+}
+
+/* Main Container */
+.container{
+    max-width:1450px;
+    margin:auto;
+    background:#fff;
+    border-radius:20px;
+    padding:28px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.header-left h1{
+    color:#6a1b9a;
+    font-size:30px;
+    margin-bottom:5px;
+}
+
+.header-left p{
+    color:#777;
+    font-size:14px;
+}
+
+.top-actions{
+    display:flex;
+    gap:10px;
+}
+
+.top-btn{
+    border:none;
+    padding:10px 16px;
+    border-radius:10px;
+    background:#6a1b9a;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.top-btn:hover{
+    background:#4a148c;
+    transform:translateY(-2px);
+}
+
+/* Table */
+.table-box{
+    overflow-x:auto;
+    border-radius:14px;
+}
+
+table{
+    width:100%;
+    min-width:1200px;
+    border-collapse:collapse;
+}
+
+th{
+    background:#6a1b9a;
+    color:white;
+    padding:15px;
+    text-align:left;
+    font-size:14px;
+    position:sticky;
+    top:0;
+}
+
+td{
+    padding:14px;
+    border-bottom:1px solid #eee;
+    font-size:14px;
+    vertical-align:middle;
+}
+
+tr:hover{
+    background:#faf5ff;
+}
+
+/* Customer Group Row */
+.customer-row td{
+    background:#4a148c;
+    color:white;
+    font-size:15px;
+    font-weight:bold;
+    padding:12px 15px;
+}
+
+/* Total Row */
+.total-row td{
+    background:#f5f3fa;
+    color:#6a1b9a;
+    font-weight:bold;
+}
+
+/* Address */
+.address{
+    max-width:220px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    cursor:pointer;
+}
+
+/* Status */
+.badge{
+    padding:6px 14px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.pending{
+    background:#fff4d8;
+    color:#d98c00;
+}
+
+.delivered{
+    background:#e6f8ea;
+    color:#2e7d32;
+}
+
+.cancelled{
+    background:#ffe5e5;
+    color:#c62828;
+}
+
+/* Action Buttons */
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+.btn{
+    border:none;
+    padding:7px 11px;
+    border-radius:8px;
+    color:white;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:bold;
+    transition:.3s;
+}
+
+.btn:hover{
+    transform:translateY(-2px);
+}
+
+.btn-purple{background:#7b1fa2;}
+.btn-green{background:#28a745;}
+.btn-red{background:#e53935;}
+.btn-gray{background:#757575;}
+
+/* Empty State */
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#777;
+}
+
+/* Responsive */
+@media(max-width:768px){
+
+    body{
+        padding:12px;
+    }
+
+    .container{
+        padding:18px;
+    }
+
+    .header{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .header-left h1{
+        font-size:25px;
+    }
+
+    th,td{
+        font-size:12px;
+        padding:10px;
+    }
+
+    .btn{
+        font-size:11px;
+        padding:6px 8px;
+    }
+
+    .address{
+        max-width:150px;
+    }
+}
+</style>
+</head>
+<body>
+    <div class="table-container">
+        <h2>Customer Orders</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Cake</th>
+                    <th>Price</th>
+                    <th>Size</th>
+                    <th>Flavor</th>
+                    <th>Delivery Date</th>
+                    <th>Status</th>
+                    <th>Action</th> 
+                </tr>
+            </thead>
+            <tbody id="orderTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        alert("Please login first");
+        window.location.href = "signin.html";
+    }
+
+    loadOrders();
+
+   function formatAddress(order) {
+    const parts = [];
+    
+    if (order.street) parts.unshift(order.street);           
+    if (order.house_number) parts.unshift(order.house_number); 
+    if (order.city) parts.push(order.city);
+    if (order.state_province) parts.push(order.state_province);
+    if (order.postal_code) parts.push(order.postal_code);
+    
+    return parts.length > 0 ? parts.join(', ') : 'No address';
+}
+
+    function loadOrders() {
+        fetch("orders.php")
+            .then(res => res.json())
+            .then(data => {
+                let table = document.getElementById("orderTable");
+                table.innerHTML = ""; 
+
+                let filteredData = data.filter(order => {
+                    return user.role === "admin" || order.email === user.email;
+                });
+
+                let grouped = {};
+                filteredData.forEach(order => {
+                    if (!grouped[order.customer]) {
+                        grouped[order.customer] = [];
+                    }
+                    grouped[order.customer].push(order);
+                });
+
+                for (let customer in grouped) {
+                    let orders = grouped[customer];
+                    let customerTotal = 0;
+
+                    let headerRow = document.createElement("tr");
+                    headerRow.innerHTML = `
+                        <td colspan="10" style="background:#4a148c; color:white; font-weight:bold; font-size:13px;">
+                            ${customer}
+                        </td>
+                    `;
+                    table.appendChild(headerRow);
+
+                    orders.forEach(order => {
+                        customerTotal += parseFloat(order.price) || 0;
+
+                        let row = document.createElement("tr");
+                        let statusClass = `status-${order.status.toLowerCase().replace(' ', '-')}`;
+                        let formattedAddress = formatAddress(order);
+                        
+                        row.innerHTML = `
+                            <td>${order.customer}</td>
+                            <td>${order.phone}</td>
+                            <td class="address-display" title="${formattedAddress}">${formattedAddress}</td>
+                            <td>${order.cake}</td>
+                            <td>₱${parseFloat(order.price).toLocaleString()}</td>
+                            <td>${order.size}</td>
+                            <td>${order.flavor}</td>
+                            <td>${order.delivery_date}</td>
+                            <td><span class="status-badge ${statusClass}">${order.status}</span></td>
+                           <td>
+                               ${user.role === "admin" ? `
+                               <button class="btn btn-status" onclick="updateStatus('${order._id}', 'Pending')">P</button>
+                               <button class="btn btn-delivered" onclick="updateStatus('${order._id}', 'Delivered')">D</button>
+                               <button class="btn btn-cancel" onclick="updateStatus('${order._id}', 'Cancelled')">C</button>
+                                ` : ''}
+                               <button class="delete-btn" onclick="deleteOrder('${order._id}')">Delete</button>
+                               </td>
+                        `;
+                        table.appendChild(row);
+                    });
+
+                    let totalRow = document.createElement("tr");
+                    totalRow.className = "total-row";
+                    totalRow.innerHTML = `
+                        <td colspan="4">Total for ${customer}</td>
+                        <td colspan="6" style="color:#4a148c;">
+                            ₱${customerTotal.toLocaleString()}
+                        </td>
+                    `;
+                    table.appendChild(totalRow);
+                }
+            })
+            .catch(err => {
+                console.error("Error loading orders:", err);
+                alert("Failed to load orders. Check console for details.");
+            });
+    }
+
+    function updateStatus(orderId, status) {
+        if (confirm(`Mark order #${orderId} as "${status}"?`)) {
+            let formData = new FormData();
+            formData.append("update_status_id", orderId);
+            formData.append("status", status);
+
+            fetch("orders.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.text())
+            .then(data => {
+                if (data.trim() === "status_updated") {
+                    alert(`Order status updated to "${status}"!`);
+                    loadOrders();  
+                } else {
+                    alert("Error: " + data);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Request failed.");
+            });
+        }
+    }
+
+    function deleteOrder(orderId) {
+        if (confirm("Are you sure you want to delete this order?")) {
+            let formData = new FormData();
+            formData.append("delete_id", orderId);
+
+            fetch("orders.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.text())
+            .then(data => {
+                if (data.trim() === "deleted") {
+                    alert("Order deleted!");
+                    loadOrders();  
+                } else {
+                    alert("Error deleting: " + data);
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert("Request failed. Check console.");
+            });
+        }
+    }
+</script>
+</body>
+</html>
+        

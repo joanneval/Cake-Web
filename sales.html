@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Monitoring</title>
+    <link rel="stylesheet" href="sign.css">
+    <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg,#f8f5ff,#efe3ff);
+    padding:25px;
+}
+
+/* Container */
+.admin-container{
+    max-width:1350px;
+    margin:auto;
+    background:white;
+    padding:30px;
+    border-radius:18px;
+    box-shadow:0 10px 35px rgba(0,0,0,0.08);
+}
+
+/* Header */
+.admin-header{
+    text-align:center;
+    margin-bottom:28px;
+}
+
+.admin-header h1{
+    color:#6a1b9a;
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.admin-header p{
+    color:#777;
+    font-size:15px;
+}
+
+/* Stats */
+.stats-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:18px;
+    margin-bottom:25px;
+}
+
+.stat-card{
+    background:linear-gradient(135deg,#6a1b9a,#ab47bc);
+    color:white;
+    padding:22px;
+    border-radius:16px;
+    text-align:center;
+    transition:0.3s;
+}
+
+.stat-card:hover{
+    transform:translateY(-4px);
+}
+
+.stat-number{
+    font-size:28px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+/* Filters */
+.top-bar{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin-bottom:22px;
+}
+
+.top-bar input{
+    padding:11px 14px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    outline:none;
+}
+
+.top-bar input:focus{
+    border-color:#9c27b0;
+}
+
+.btn{
+    border:none;
+    background:#6a1b9a;
+    color:white;
+    padding:11px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#4a148c;
+    transform:translateY(-2px);
+}
+
+/* Table */
+.table-box{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    min-width:800px;
+    border-collapse:collapse;
+}
+
+th{
+    background:#6a1b9a;
+    color:white;
+    padding:14px;
+    text-align:left;
+}
+
+td{
+    padding:14px;
+    border-bottom:1px solid #eee;
+}
+
+tr:hover{
+    background:#faf5ff;
+}
+
+/* Status */
+.status{
+    padding:7px 12px;
+    border-radius:30px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.delivered{
+    background:#e8f5e9;
+    color:#2e7d32;
+}
+
+.pending{
+    background:#fff8e1;
+    color:#f57c00;
+}
+
+.cancelled{
+    background:#ffebee;
+    color:#c62828;
+}
+
+/* Responsive */
+@media(max-width:768px){
+    body{
+        padding:12px;
+    }
+
+    .admin-container{
+        padding:18px;
+    }
+
+    .admin-header h1{
+        font-size:26px;
+    }
+
+    .top-bar{
+        flex-direction:column;
+    }
+}
+</style>
+</head>
+<body>
+    <script>
+        let user = JSON.parse(localStorage.getItem("user"));
+        if(!user || user.role !== "admin"){
+            alert("Admin access only!");
+            window.location.href = "homepage.html";
+        }
+    </script>
+
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Sales Monitoring</h1>
+            <p>Track sales, profitability, and performance metrics</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number" id="totalSales">₱0</div>
+                <div>Total Sales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalOrders">0</div>
+                <div>Total Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="deliveredOrders">0</div>
+                <div>Delivered</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="profit">₱0</div>
+                <div>Est. Profit (40%)</div>
+            </div>
+        </div>
+
+        <div class="date-filter">
+            <input type="date" id="dateFilter" onchange="loadSales()">
+            <button class="btn" onclick="exportSales()"> Export CSV</button>
+            <button class="btn" onclick="loadSales()"> Refresh</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Cake</th>
+                    <th>Price</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="salesTable"></tbody>
+        </table>
+    </div>
+
+    <script>
+        loadSales();
+
+        function loadSales(){
+            let dateFilter = document.getElementById("dateFilter").value;
+            fetch(`sales.php?date=${dateFilter}`) 
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.json();
+            })
+            .then(data => {
+                console.log('Sales data:', data);
+                let table = document.getElementById("salesTable");
+                let totalSales = 0;
+                let deliveredCount = 0;
+
+                table.innerHTML = "";
+                if(data.length === 0){
+                    table.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">No sales data found</td></tr>';
+                } else {
+                    data.forEach(sale =>{  
+                        let row = table.insertRow();
+                        let statusClass = `status-${sale.status.toLowerCase()}`;
+                        totalSales += parseFloat(sale.price || 0);
+                        if(sale.status === 'Delivered') deliveredCount++;
+                        
+                        row.innerHTML = `
+                            <td>${new Date(sale.delivery_date).toLocaleDateString()}</td>
+                            <td>${sale.customer}</td>
+                            <td>${sale.cake}</td>
+                            <td>₱${parseFloat(sale.price || 0).toLocaleString()}</td>
+                            <td class="${statusClass}"><strong>${sale.status}</strong></td>
+                        `;
+                    });
+                }
+
+                document.getElementById("totalSales").textContent = `₱${totalSales.toLocaleString()}`;
+                document.getElementById("totalOrders").textContent = data.length;
+                document.getElementById("deliveredOrders").textContent = deliveredCount;
+                document.getElementById("profit").textContent = `₱${Math.round(totalSales * 0.4).toLocaleString()}`;
+            })
+            .catch(err => {
+                console.error('Sales load error:', err);
+                document.getElementById("salesTable").innerHTML = 
+                    '<tr><td colspan="5" style="text-align:center; color:red; padding:20px;">Error loading sales. Check console (F12).</td></tr>';
+            });
+        }
+
+        function exportSales() {
+            
+            alert('Exporting CSV...');
+            window.open(`sales.php?export=csv`, '_blank');
+        }
+    </script>
+</body>
+</html>

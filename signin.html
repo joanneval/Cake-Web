@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#f7eeff,#ecd8ff,#ffffff);
+}
+
+/* LOGIN CARD */
+.login-container{
+    width:100%;
+    max-width:430px;
+    background:rgba(255,255,255,0.96);
+    border-radius:24px;
+    padding:38px 32px;
+    box-shadow:0 18px 45px rgba(106,27,154,0.12);
+}
+
+/* SMALL HEADER TEXT */
+header{
+    text-align:center;
+    font-size:14px;
+    color:#8c5fb0;
+    margin-bottom:10px;
+    font-weight:600;
+    letter-spacing:1px;
+}
+
+/* LOGO FIXED */
+.logo{
+    display:block;
+    width:140px;          /* smaller */
+    max-width:100%;
+    height:auto;
+    margin:0 auto 18px auto;
+    object-fit:contain;
+}
+
+/* TITLE */
+h2{
+    text-align:center;
+    color:#6a1b9a;
+    font-size:1.7rem;
+    margin-bottom:24px;
+}
+
+/* FORM */
+form{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+input{
+    width:100%;
+    padding:14px 16px;
+    border:2px solid #ead7f7;
+    border-radius:14px;
+    font-size:15px;
+    background:#fff;
+    transition:.3s;
+}
+
+input:focus{
+    outline:none;
+    border-color:#9b4dca;
+    box-shadow:0 0 0 4px rgba(155,77,202,.08);
+}
+
+/* BUTTON */
+button{
+    margin-top:5px;
+    padding:14px;
+    border:none;
+    border-radius:50px;
+    background:linear-gradient(45deg,#9b4dca,#6a1b9a);
+    color:white;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px rgba(106,27,154,.18);
+}
+
+/* LINKS */
+.footer-links{
+    margin-top:22px;
+    text-align:center;
+}
+
+.footer-links p{
+    font-size:14px;
+    color:#666;
+    margin:8px 0;
+}
+
+.footer-links a{
+    color:#6a1b9a;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.footer-links a:hover{
+    text-decoration:underline;
+}
+
+/* MOBILE */
+@media(max-width:500px){
+
+.login-container{
+    padding:28px 22px;
+}
+
+.logo{
+    width:110px;
+}
+
+h2{
+    font-size:1.5rem;
+}
+
+}
+</style>
+</head>
+<body>
+
+<div class="login-container">
+    <header>Sign in</header>
+
+    <div class="content">
+        <img src="image/logo.png" class="logo">
+
+        <form id="signinForm">
+            <input type="email" id="loginEmail" placeholder="Email Address" required>
+            <input type="password" id="loginPassword" placeholder="Password" required>
+            <button type="submit">LOGIN</button>
+        </form>
+
+        <div class="footer-links">
+            <p>
+                Forgot your password?
+                <a href="javascript:void(0)" onclick="openResetModal()">Reset password</a>
+            </p>
+
+            <p>
+                No account yet?
+                <a href="signup.html">Sign up</a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+<!-- RESET PASSWORD MODAL HERE -->
+<div id="resetModal" style="
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.55);
+z-index:999;
+justify-content:center;
+align-items:center;
+">
+
+<div style="
+background:#fff;
+width:100%;
+max-width:420px;
+padding:30px;
+border-radius:20px;
+">
+
+<h2>Reset Password</h2>
+
+<form id="resetForm">
+<input type="email" id="resetEmail" placeholder="Enter your email" required>
+<input type="password" id="newPassword" placeholder="New password" required>
+<input type="password" id="confirmNewPassword" placeholder="Confirm password" required>
+
+<button type="submit">RESET PASSWORD</button>
+
+<button type="button" onclick="closeResetModal()">Cancel</button>
+</form>
+
+</div>
+</div>
+
+
+<script>
+
+/* LOGIN */
+document.getElementById("signinForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let formData = new FormData();
+    formData.append("email", loginEmail.value);
+    formData.append("password", loginPassword.value);
+
+    fetch("signin.php",{
+        method:"POST",
+        body:formData
+    })
+    .then(res => res.text())
+    .then(data => {
+        if(data.trim()=="invalid"){
+            alert("Invalid email or password");
+        }else{
+            let userData = JSON.parse(data);
+            localStorage.setItem("user", JSON.stringify(userData));
+            window.location="homepage.html";
+        }
+    });
+});
+
+
+/* OPEN MODAL */
+function openResetModal(){
+    document.getElementById("resetModal").style.display="flex";
+}
+
+/* CLOSE MODAL */
+function closeResetModal(){
+    document.getElementById("resetModal").style.display="none";
+}
+
+
+/* RESET PASSWORD */
+document.getElementById("resetForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let pass1 = newPassword.value;
+    let pass2 = confirmNewPassword.value;
+
+    if(pass1 != pass2){
+        alert("Passwords do not match");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append("email", resetEmail.value);
+    formData.append("password", pass1);
+
+    fetch("reset_password.php",{
+        method:"POST",
+        body:formData
+    })
+    .then(res => res.text())
+    .then(data => {
+        if(data.trim()=="success"){
+            alert("Password updated!");
+            closeResetModal();
+        }else{
+            alert(data);
+        }
+    });
+});
+
+</script>
+
+</body>
+</html>
