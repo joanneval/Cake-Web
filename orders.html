@@ -315,13 +315,11 @@ tr:hover{
                             <td><span class="status-badge ${statusClass}">${order.status}</span></td>
                            <td>
                                ${user.role === "admin" ? `
-                               <div class="actions">
-                                <ul>
-                               <li><button class="btn btn-purple" onclick="updateStatus('${order._id}', 'Pending')">Pending</button></li>
-                                <li><button class="btn btn-green" onclick="updateStatus('${order._id}', 'Delivered')">Delivered</button></li>
-                                <li><button class="btn btn-red" onclick="updateStatus('${order._id}', 'Cancelled')">Cancel</button></li>
-                                <li><button class="btn btn-gray" onclick="deleteOrder('${order._id}')">Delete</button></li>
-                                </ul>
+                              <div class="actions">
+                                <button class="btn btn-purple" onclick="updateStatus('${order._id}', 'Pending')">Pending</button>
+                                <button class="btn btn-green" onclick="updateStatus('${order._id}', 'Delivered')">Delivered</button>
+                                <button class="btn btn-red" onclick="updateStatus('${order._id}', 'Cancelled')">Cancel</button>
+                                <button class="btn btn-gray" onclick="deleteOrder('${order._id}')">Delete</button>
                             </div>
                             ` : `
                                 <div class="actions">
