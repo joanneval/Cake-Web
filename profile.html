@@ -1,197 +1,305 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>My profile</title>
-    <link rel="stylesheet" href="sign.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Management</title>
+
     <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:Arial, sans-serif;
-}
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
 
-body{
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#7b1fa2,#ba68c8,#f3e5f5);
-    padding:20px;
-}
+        body{
+            min-height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:linear-gradient(135deg,#7b1fa2,#ba68c8,#f3e5f5);
+            padding:20px;
+        }
 
-.profile-container{
-    width:100%;
-    max-width:700px;
-    background:#fff;
-    padding:35px;
-    border-radius:20px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.15);
-    animation:fadeIn 0.6s ease;
-}
+        .profile-container{
+            width:100%;
+            max-width:850px;
+            background:white;
+            border-radius:25px;
+            overflow:hidden;
+            display:grid;
+            grid-template-columns:300px 1fr;
+            box-shadow:0 15px 40px rgba(0,0,0,0.15);
+            animation:fadeIn 0.6s ease;
+        }
 
-.profile-header{
-    text-align:center;
-    margin-bottom:25px;
-}
+        /* LEFT SIDE */
+        .profile-left{
+            background:linear-gradient(180deg,#8e24aa,#6a1b9a);
+            color:white;
+            padding:40px 25px;
+            text-align:center;
+            display:flex;
+            flex-direction:column;
+            justify-content:center;
+            align-items:center;
+        }
 
-.profile-header h1{
-    color:#6a1b9a;
-    font-size:32px;
-}
+        .profile-image{
+            width:120px;
+            height:120px;
+            border-radius:50%;
+            background:white;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:50px;
+            color:#8e24aa;
+            font-weight:bold;
+            margin-bottom:20px;
+            border:5px solid rgba(255,255,255,0.3);
+        }
 
-.profile-header p{
-    color:#777;
-    margin-top:5px;
-    font-size:15px;
-}
+        .profile-left h2{
+            font-size:26px;
+            margin-bottom:10px;
+        }
 
-.section-title{
-    margin:25px 0 12px;
-    color:#6a1b9a;
-    font-size:18px;
-    border-left:5px solid #ba68c8;
-    padding-left:10px;
-}
+        .profile-left p{
+            font-size:14px;
+            opacity:0.9;
+            line-height:1.5;
+        }
 
-.input-group{
-    margin-bottom:15px;
-}
+        /* RIGHT SIDE */
+        .profile-right{
+            padding:40px;
+        }
 
-.input-group label{
-    display:block;
-    margin-bottom:6px;
-    font-weight:bold;
-    color:#4a148c;
-}
+        .profile-right h1{
+            color:#6a1b9a;
+            margin-bottom:8px;
+            font-size:32px;
+        }
 
-.input-group input{
-    width:100%;
-    padding:12px 15px;
-    border:1px solid #ddd;
-    border-radius:10px;
-    font-size:15px;
-    transition:0.3s;
-}
+        .profile-right .subtitle{
+            color:#777;
+            margin-bottom:30px;
+            font-size:15px;
+        }
 
-.input-group input:focus{
-    border-color:#9c27b0;
-    outline:none;
-    box-shadow:0 0 8px rgba(156,39,176,0.2);
-}
+        .section-title{
+            color:#8e24aa;
+            font-size:18px;
+            margin-bottom:18px;
+            font-weight:bold;
+            border-left:5px solid #ba68c8;
+            padding-left:10px;
+        }
 
-.row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:15px;
-}
+        .input-group{
+            margin-bottom:18px;
+        }
 
-button{
-    width:100%;
-    padding:14px;
-    margin-top:20px;
-    border:none;
-    border-radius:12px;
-    background:linear-gradient(135deg,#8e24aa,#ba68c8);
-    color:white;
-    font-size:16px;
-    font-weight:bold;
-    cursor:pointer;
-    transition:0.3s;
-}
+        .input-group label{
+            display:block;
+            margin-bottom:7px;
+            color:#4a148c;
+            font-weight:bold;
+            font-size:14px;
+        }
 
-button:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 20px rgba(142,36,170,0.25);
-}
+        .input-group input{
+            width:100%;
+            padding:14px 15px;
+            border:1px solid #ddd;
+            border-radius:12px;
+            font-size:15px;
+            transition:0.3s;
+            background:#fafafa;
+        }
 
-@keyframes fadeIn{
-    from{
-        opacity:0;
-        transform:translateY(20px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
+        .input-group input:focus{
+            border-color:#9c27b0;
+            outline:none;
+            background:white;
+            box-shadow:0 0 10px rgba(156,39,176,0.2);
+        }
 
-@media(max-width:600px){
-    .row{
-        grid-template-columns:1fr;
-    }
+        .row{
+            display:grid;
+            grid-template-columns:1fr 1fr;
+            gap:15px;
+        }
 
-    .profile-container{
-        padding:25px;
-    }
+        button{
+            width:100%;
+            padding:15px;
+            margin-top:15px;
+            border:none;
+            border-radius:14px;
+            background:linear-gradient(135deg,#8e24aa,#ba68c8);
+            color:white;
+            font-size:16px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:0.3s;
+        }
 
-    .profile-header h1{
-        font-size:26px;
-    }
-}
-</style>
+        button:hover{
+            transform:translateY(-3px);
+            box-shadow:0 10px 20px rgba(142,36,170,0.3);
+        }
+
+        @keyframes fadeIn{
+            from{
+                opacity:0;
+                transform:translateY(20px);
+            }
+            to{
+                opacity:1;
+                transform:translateY(0);
+            }
+        }
+
+        @media(max-width:768px){
+
+            .profile-container{
+                grid-template-columns:1fr;
+            }
+
+            .profile-left{
+                padding:30px 20px;
+            }
+
+            .profile-right{
+                padding:30px 20px;
+            }
+
+            .row{
+                grid-template-columns:1fr;
+            }
+        }
+    </style>
 </head>
+
 <body>
+
     <div class="profile-container">
-        <h1>Profile Management</h1>
-        <input type="text" id="fullname" placeholder="Full name">
-        <br>
-        <input type="text" id="phone" placeholder="Phone Number">
-        <br>
 
-        <div class="address-group">
-            <label for="street">Street Address:</label>
-            <input type="text" id="street" placeholder="e.g., 123 Main St">
-        </div>
-        <div class="address-group">
-            <label for="house_number">House Number:</label>
-            <input type="text" id="house_number" placeholder="e.g., Apt 4B or Unit 10">
-        </div>
-        <div class="address-group">
-            <label for="city">City:</label>
-            <input type="text" id="city" placeholder="e.g., Springfield">
-        </div>
-        <div class="address-row">
-            <div class="address-field address-group">
-                <label for="state_province">State/Province:</label>
-                <input type="text" id="state_province" placeholder="e.g., IL">
+        <!-- LEFT PANEL -->
+        <div class="profile-left">
+
+            <div class="profile-image">
+                A
             </div>
-            <div class="address-field address-group">
-                <label for="postal_code">Postal Code:</label>
-                <input type="text" id="postal_code" placeholder="e.g., 62704">
-            </div>
+
+            <h2>Admin User</h2>
+
+            <p>
+                Manage your personal information and keep your profile updated.
+            </p>
+
         </div>
 
-        <button onclick="updateProfile()">Update Profile</button>
+        <!-- RIGHT PANEL -->
+        <div class="profile-right">
+
+            <h1>Profile Management</h1>
+            <p class="subtitle">Update your profile information below.</p>
+
+            <div class="section-title">Personal Information</div>
+
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="fullname" placeholder="Enter your full name">
+            </div>
+
+            <div class="input-group">
+                <label>Phone Number</label>
+                <input type="text" id="phone" placeholder="Enter your phone number">
+            </div>
+
+            <div class="section-title">Address Information</div>
+
+            <div class="input-group">
+                <label>Street Address</label>
+                <input type="text" id="street" placeholder="e.g. 123 Main St">
+            </div>
+
+            <div class="input-group">
+                <label>House Number</label>
+                <input type="text" id="house_number" placeholder="e.g. Unit 10">
+            </div>
+
+            <div class="input-group">
+                <label>City</label>
+                <input type="text" id="city" placeholder="e.g. Tacloban">
+            </div>
+
+            <div class="row">
+
+                <div class="input-group">
+                    <label>State/Province</label>
+                    <input type="text" id="state_province" placeholder="e.g. Leyte">
+                </div>
+
+                <div class="input-group">
+                    <label>Postal Code</label>
+                    <input type="text" id="postal_code" placeholder="e.g. 6500">
+                </div>
+
+            </div>
+
+            <button onclick="updateProfile()">
+                Update Profile
+            </button>
+
+        </div>
+
     </div>
 
     <script>
+
         window.onload = function() {
+
             let user = JSON.parse(localStorage.getItem("user"));
-            console.log("Loaded user:", user);
 
             if (user) {
+
                 document.getElementById("fullname").value = user.name || "";
                 document.getElementById("phone").value = user.phone || "";
 
                 try {
-                    const addressParts = JSON.parse(user.address || '{}'); 
+
+                    const addressParts = JSON.parse(user.address || '{}');
+
                     document.getElementById("street").value = addressParts.street || user.street || "";
                     document.getElementById("house_number").value = addressParts.house_number || user.house_number || "";
                     document.getElementById("city").value = addressParts.city || user.city || "";
                     document.getElementById("state_province").value = addressParts.state_province || user.state_province || "";
                     document.getElementById("postal_code").value = addressParts.postal_code || user.postal_code || "";
+
                 } catch (e) {
+
                     document.getElementById("street").value = user.street || "";
                     document.getElementById("house_number").value = user.house_number || "";
                     document.getElementById("city").value = user.city || "";
                     document.getElementById("state_province").value = user.state_province || "";
                     document.getElementById("postal_code").value = user.postal_code || "";
                 }
+
+                // Update left profile name + avatar
+                document.querySelector(".profile-left h2").innerText = user.name || "Admin User";
+
+                let firstLetter = (user.name || "A").charAt(0).toUpperCase();
+                document.querySelector(".profile-image").innerText = firstLetter;
             }
         };
 
         function updateProfile() {
+
             let user = JSON.parse(localStorage.getItem("user"));
 
             let name = document.getElementById("fullname").value.trim();
@@ -206,15 +314,16 @@ button:hover{
                 alert("Please fill in all profile and address details.");
                 return;
             }
-            console.log("Form values:", {name, phone, street, house_number, city, state_province, postal_code});
 
             let phonePattern = /^\+?[0-9]{10,15}$/;
+
             if (!phonePattern.test(phone.replace(/\s/g, ''))) {
-                alert("Please enter a valid phone number (10-15 digits).");
+                alert("Please enter a valid phone number.");
                 return;
             }
 
             let formData = new FormData();
+
             formData.append("email", user.email);
             formData.append("name", name);
             formData.append("phone", phone);
@@ -228,30 +337,44 @@ button:hover{
                 method: "POST",
                 body: formData
             })
+
             .then(res => res.text())
+
             .then(data => {
-                console.log("Profile update response:", data.trim());
+
                 if (data.trim() === "success") {
-                    
+
                     user.name = name;
                     user.phone = phone;
                     user.street = street;
                     user.house_number = house_number;
                     user.city = city;
                     user.state_province = state_province;
-                    user.postal_code = postal_code; 
+                    user.postal_code = postal_code;
+
                     localStorage.setItem("user", JSON.stringify(user));
 
                     alert("Profile updated successfully!");
+
+                    // update UI instantly
+                    document.querySelector(".profile-left h2").innerText = name;
+                    document.querySelector(".profile-image").innerText =
+                        name.charAt(0).toUpperCase();
+
                 } else {
+
                     alert("Database Error: " + data);
                 }
             })
+
             .catch(err => {
-                console.error("Update profile error:", err);
+
+                console.error(err);
                 alert("Network error occurred.");
             });
         }
+
     </script>
+
 </body>
 </html>
