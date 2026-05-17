@@ -2,7 +2,7 @@ FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y git unzip zip curl libssl-dev pkg-config libcurl4-openssl-dev
 
-RUN pecl install mongodb && docker-php-ext-enable mongodb
+RUN pecl install mongodb-1.17.1 && docker-php-ext-enable mongodb
 
 COPY . /var/www/html/
 WORKDIR /var/www/html
