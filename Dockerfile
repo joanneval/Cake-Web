@@ -9,8 +9,7 @@ RUN pecl install mongodb \
 COPY . /var/www/html/
 WORKDIR /var/www/html
 
-RUN curl -sS https://getcomposer.org | php \
-    && mv composer.phar /usr/local/bin/composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 RUN composer install
 
