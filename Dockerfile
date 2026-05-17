@@ -9,6 +9,8 @@ WORKDIR /var/www/html
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 RUN composer install
 
 EXPOSE 80
