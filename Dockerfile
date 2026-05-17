@@ -1,8 +1,10 @@
 FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y git unzip zip curl \
-    && curl -sSL https://github.com -o /usr/local/bin/install-php-extensions \
-    && chmod +x /usr/local/bin/install-php-extensions
+RUN apt-get update && apt-get install -y git unzip zip curl
+
+RUN curl -sSL https://github.com -o /usr/local/bin/install-php-extensions
+
+RUN sed -i 's/\r$//' /usr/local/bin/install-php-extensions && chmod +x /usr/local/bin/install-php-extensions
 
 RUN install-php-extensions mongodb
 
