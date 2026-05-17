@@ -1,12 +1,8 @@
 FROM php:8.2-apache
 
-RUN apt-get update && apt-get install -y git unzip zip curl
+RUN apt-get update && apt-get install -y git unzip zip curl libssl-dev pkg-config libcurl4-openssl-dev
 
-RUN curl -sSL https://github.com -o /usr/local/bin/install-php-extensions
-
-RUN sed -i 's/\r$//' /usr/local/bin/install-php-extensions && chmod +x /usr/local/bin/install-php-extensions
-
-RUN install-php-extensions mongodb
+RUN pecl install mongodb && docker-php-ext-enable mongodb
 
 COPY . /var/www/html/
 WORKDIR /var/www/html
