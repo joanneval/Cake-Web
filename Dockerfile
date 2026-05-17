@@ -1,16 +1,15 @@
 FROM php:8.2-apache
 
 RUN apt-get update && apt-get install -y \
-    libssl-dev pkg-config git unzip zip curl
+    libssl-dev pkg-config git unzip zip curl libcurl4-openssl-dev
 
 RUN pecl install mongodb \
     && docker-php-ext-enable mongodb
 
 COPY . /var/www/html/
-
 WORKDIR /var/www/html
 
-RUN curl -sS https://getcomposer.org/installer | php \
+RUN curl -sS https://getcomposer.org | php \
     && mv composer.phar /usr/local/bin/composer
 
 RUN composer install
