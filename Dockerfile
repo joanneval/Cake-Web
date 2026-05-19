@@ -13,7 +13,6 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN composer install
 
-# Fix: Redirect the main root address straight to your designed HTML signup layout
 RUN echo "<?php header('Location: /signup.html'); exit;" > index.php
 
-CMD php -S 0.0.0.0:$PORT
+CMD ["sh", "-c", "php -S 0.0.0.0:$PORT"]
