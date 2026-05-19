@@ -15,4 +15,5 @@ RUN composer install
 
 RUN echo "<?php header('Location: /signup.html'); exit;" > index.php
 
-CMD ["sh", "-c", "php -S 0.0.0.0:$PORT"]
+RUN chmod +x start.sh
+CMD ["./start.sh"]
